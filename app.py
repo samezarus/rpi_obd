@@ -223,9 +223,9 @@ Button1 = Button(form1, text = 'X', command=lambda:Button1Click(form1)).place(x=
 Button2 = Button(form1, text = 'ХХХ', command=Button2Click).place(x=915, y=500, width=100, height=90)
 
 # Надпись в низу экрана
-label1 = Label(form1, textvariable=txt, fg="#eee", bg="#000000", font=("Helvetica", 40))
-label1.pack()
-label1.place(x=150, y=500)
+#label1 = Label(form1, textvariable=txt, fg="#eee", bg="#000000", font=("Helvetica", 40))
+#label1.pack()
+#label1.place(x=150, y=500)
 
 txt.set("0000")
 
