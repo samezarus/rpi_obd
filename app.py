@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf8 -*-
 
 from tkinter import *
@@ -13,6 +14,8 @@ import threading
 
 import obd
 
+import RPi.GPIO as GPIO
+
 #######################################################################################################
 
 width, height = 500, 500         # frame canvas dimensions
@@ -27,6 +30,8 @@ form1.configure(bg="black")
 frame_font = Font(family="Arial", size=40, weight='bold')
 
 txt = StringVar()
+
+GPIO.setmode(GPIO.BCM)
 
 #######################################################################################################
 		
@@ -90,12 +95,12 @@ class Speed(Canvas):
 		
 		self.metr = self.create_oval(x0-ray*1.1, y0-ray*1.1, x0+ray*1.1, y0+ray*1.1, fill=self.meter_color, outline=self.ring_color, width=30) # Параметры спидометра
 		coef = 0.1
-		self.create_oval(x0-ray*coef, y0-ray*coef, x0+ray*coef, y0+ray*coef, fill="#2C2C25")
+		
 		for i in range(1+int((vmax-vmin)/step)):
 			v     = vmin + step*i
 			angle = (5+6*((v-vmin)/(vmax-vmin)))*math.pi/4
 			self.create_line(x0+ray*math.sin(angle)*0.9, y0 - ray*math.cos(angle)*0.9, x0+ray*math.sin(angle)*0.98, y0 - ray*math.cos(angle)*0.98, fill="#fff", width=2)
-			self.create_text(x0+ray*math.sin(angle)*0.75, y0 - ray*math.cos(angle)*0.75, text=v,fill=self.digitals_color,font=frame_font)
+			self.create_text(x0+ray*math.sin(angle)*0.69, y0 - ray*math.cos(angle)*0.7, text=v,fill=self.digitals_color,font=frame_font)
 			if i==int(vmax-vmin)/step:
 				continue
 			for dv in range(1, 5):
@@ -104,7 +109,7 @@ class Speed(Canvas):
 		
 		self.needle = self.create_line(x0-ray*math.sin(5*math.pi/4)*len2, y0+ray*math.cos(5*math.pi/4)*len2, x0+ray*math.sin(5*math.pi/4)*len1, y0-ray*math.cos(5*math.pi/4)*len1, width=7, fill=self.arrow_color) # Стрелка
 		
-		#self.create_oval(x0-ray*coef-40, y0-ray*coef+110, x0+ray*coef+40, y0+ray*coef+190, fill=self.alert1_color) # Круг предупреждения
+		self.create_oval(x0-ray*coef, y0-ray*coef, x0+ray*coef, y0+ray*coef, fill="#2C2C25") # Круг в центре
 
 	def draw_needle(self, v):
 			
@@ -148,7 +153,7 @@ class Rpm(Canvas):
 		
 		self.metr = self.create_oval(x0-ray*1.1, y0-ray*1.1, x0+ray*1.1, y0+ray*1.1, fill=self.meter_color, outline=self.ring_color, width=30) # Параметры спидометра
 		coef = 0.1
-		self.create_oval(x0-ray*coef, y0-ray*coef, x0+ray*coef, y0+ray*coef, fill="#2C2C25")
+
 		for i in range(1+int((vmax-vmin)/step)):
 			v     = vmin + step*i
 			angle = (5+6*((v-vmin)/(vmax-vmin)))*math.pi/4
@@ -162,7 +167,7 @@ class Rpm(Canvas):
 		
 		self.needle = self.create_line(x0-ray*math.sin(5*math.pi/4)*len2, y0+ray*math.cos(5*math.pi/4)*len2, x0+ray*math.sin(5*math.pi/4)*len1, y0-ray*math.cos(5*math.pi/4)*len1, width=7, fill=self.arrow_color) # Стрелка
 		
-		#self.create_oval(x0-ray*coef-40, y0-ray*coef+110, x0+ray*coef+40, y0+ray*coef+190, fill=self.alert1_color) # Круг предупреждения
+		self.create_oval(x0-ray*coef, y0-ray*coef, x0+ray*coef, y0+ray*coef, fill="#2C2C25") # Круг в центре
 
 	def draw_needle(self, v):
 		v = v / 1000
@@ -199,7 +204,7 @@ f = Frame(form1, bg="black")
 
 #	Датчик скорости
 speed = Speed(f, width=width, height=height, bg="black", bd = 0, highlightthickness=0, relief="ridge")
-speed.draw(0, 180, 20)
+speed.draw(0, 160, 20)
 speed.pack(side=LEFT)
 #speed.draw_needle (50)
 
@@ -237,5 +242,7 @@ ttt.start()
 #t1 = threading.Thread(target=Test, args=())
 #t1.daemon = True
 #t1.start()
+
+
 	
 form1.mainloop()
